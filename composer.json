@@ -1,0 +1,28 @@
+{
+    "name": "lzomedia/groupsextractor",
+    "description": "Laravel 5.4 user groups package",
+    "license": "MIT",
+    "keywords": [
+        "laravel",
+        "groups",
+        "conversations"
+    ],
+    "authors": [
+        {
+            "name": "Lzo Media",
+            "email": "stefan@lzo.ro"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {
+        "illuminate/support": "^5.4"
+    },
+    "autoload": {
+        "psr-4": {
+          "LzoMedia\\GroupsExtractor\\": "src/"
+        },
+        "classmap": [
+
+        ]
+    }
+}
