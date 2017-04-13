@@ -5,6 +5,7 @@ namespace LzoMedia\GroupsExtractor\Managers;
 
 use LzoMedia\GroupsExtractor\Interfaces\SocialExtractorInterface;
 
+
 /**
  * Created by PhpStorm.
  * User: lzo
@@ -24,6 +25,9 @@ class ClientManager implements SocialExtractorInterface
         return $this->clientType = $type;
     }
 
+    /**
+     * @return mixed
+     */
     public function getSocialType()
     {
         return $this->clientType;
@@ -33,6 +37,7 @@ class ClientManager implements SocialExtractorInterface
      * @return mixed
      */
     function process(){
+
 
         return $this->clientType->process();
 

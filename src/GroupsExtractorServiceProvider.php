@@ -27,15 +27,11 @@ class GroupsExtractorServiceProvider extends ServiceProvider
 
     public function register()
     {
-        $this->registerFacebook();
-    }
-
-    private function registerFacebook()
-    {
         $this->app->bind('groupsextractor', function () {
             return $this->app->make('LzoMedia\GroupsExtractor\GroupExtractor');
         });
     }
+
 
     /**
      *

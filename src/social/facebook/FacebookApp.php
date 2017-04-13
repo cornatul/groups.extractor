@@ -54,10 +54,21 @@ class FacebookApp extends ClientManager
 
     }
 
-    public function process()
+    /**
+     * @param \Extractor $type
+     * @return mixed
+     */
+    public function process(Extractor $type)
     {
+        if($type == false){
 
-        return $this->type->process();
+            return $this->type->process();
+
+        }else{
+
+            return $type->process();
+        }
+
     }
 
 }

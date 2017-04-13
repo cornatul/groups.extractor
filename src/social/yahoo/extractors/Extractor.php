@@ -33,7 +33,7 @@ abstract class Extractor
      */
     public function setUrl($url)
     {
-        $this->url = $url;
+       return $this->url = $url;
     }
 
     /**
@@ -53,7 +53,8 @@ abstract class Extractor
     }
 
     /**
-     * @return mixed
+     * method getUrl
+     * @return string
      */
     public function getUrl()
     {

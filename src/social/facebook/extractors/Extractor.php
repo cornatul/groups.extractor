@@ -25,6 +25,7 @@ abstract class Extractor
      */
     public function process(){
 
+        return 'start the facebook process';
     }
 
     /**

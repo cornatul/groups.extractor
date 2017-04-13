@@ -1,19 +1,20 @@
 <?php
-
-namespace LzoMedia\GroupsExtractor\Social\Yahoo\Extractors;
-
-use LzoMedia\GroupsExtractor\Interfaces\GroupInterface;
-use LzoMedia\GroupsExtractor\Objects\Group;
-use LzoMedia\GroupsExtractor\Social\Yahoo\Extractors\Extractor;
-
-
 /**
  * Created by PhpStorm.
  * User: lzo
  * Date: 30/03/17
  * Time: 08:29
+ * @package Extractors
  */
-class GroupExtractor extends Extractor implements GroupInterface
+
+namespace LzoMedia\GroupsExtractor\Social\Yahoo\Extractors;
+
+
+/**
+ * Class MessagesExtractor
+ * @package LzoMedia\GroupsExtractor\Social\Yahoo\Extractors
+ */
+class MessagesExtractor extends Extractor
 {
 
     protected $extractor;
@@ -53,6 +54,8 @@ class GroupExtractor extends Extractor implements GroupInterface
 
 
     /**
+     * @class MessagesExtractor
+     * @method getLimit
      * @return int
      */
     public function getLimit()
@@ -61,6 +64,7 @@ class GroupExtractor extends Extractor implements GroupInterface
     }
 
     /**
+     * @method setLimit
      * @param int $limit
      */
     public function setLimit()
@@ -69,6 +73,8 @@ class GroupExtractor extends Extractor implements GroupInterface
     }
 
     /**
+     * @method getQuery
+     *
      * @return string
      */
     public function getQuery()
@@ -77,11 +83,12 @@ class GroupExtractor extends Extractor implements GroupInterface
     }
 
     /**
+     * @method setQuery
      * @param string $query
      */
     public function setQuery($query)
     {
-       return    $this->query = $this->query.$query;
+       return $this->query = $this->query.$query;
     }
 
 
@@ -116,12 +123,18 @@ class GroupExtractor extends Extractor implements GroupInterface
      */
     public function setOffset($offset)
     {
+        if(!is_int($offset))
+
+            throw new \Exception('Please provide a integer');
+
         $this->offset = $offset;
     }
 
 
     /***
-     * @return string
+     * @method process
+     * @description Mesages Extractor for yahoo groups
+     * @return array
      */
     public function process()
     {
@@ -153,16 +166,9 @@ class GroupExtractor extends Extractor implements GroupInterface
 
                     if($group->restricted == 'OPEN'){
 
-                        $results[] = $this->generateGroup($group);
+                        $results[] = $group;
                     }
                 }
-            }
-
-
-            if($i == 1000){
-
-                return ($results);
-
             }
 
         }while(array_key_exists('ygData', $check));
@@ -193,11 +199,10 @@ class GroupExtractor extends Extractor implements GroupInterface
     }
 
     /**
-     * @method generateNextUrl
-     * return string
-     * @param int $in
+     * @param $in
      */
-    function generateNextUrl($in = 0){
+    function generateNextUrl($in){
+
 
         $this->setOffset($in);
 
@@ -212,29 +217,6 @@ class GroupExtractor extends Extractor implements GroupInterface
     }
 
 
-    /**
-     * @method generateGroup
-     * @param $groupJson
-     * @return Group
-     */
-    function generateGroup($groupJson = '')
-    {
-
-
-        $group = new Group();
-
-        $group->setName(@$groupJson->name);
-
-        $group->setDescription(@$groupJson->desc);
-
-        $group->setCover(@$groupJson->photoUrl);
-
-        $group->setGroupId(@$groupJson->group_id);
-
-        return $group;
-
-
-    }
 
 
 }
