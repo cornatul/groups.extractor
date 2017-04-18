@@ -76,6 +76,7 @@ class Group
     }
 
     /**
+     * @method setName
      * @param mixed $name
      */
     public function setName($name)
@@ -86,7 +87,9 @@ class Group
 
 
     /**
+     *
      * @param mixed $feed
+     * @return $this
      */
     public function setFeed($feed)
     {
@@ -96,7 +99,9 @@ class Group
 
 
     /**
+     * @method setMembers
      * @param mixed $members
+     * @return $this
      */
     public function setMembers($members)
     {
@@ -114,6 +119,7 @@ class Group
     }
 
     /**
+     * @method getFeed
      * @return mixed
      */
     public function getFeed()
@@ -123,6 +129,7 @@ class Group
 
 
     /**
+     * @method getMembers
      * @return mixed
      */
     public function getMembers()
@@ -131,6 +138,7 @@ class Group
     }
 
     /**
+     * @method getName
      * @return mixed
      */
     public function getName()

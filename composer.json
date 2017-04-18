@@ -1,9 +1,8 @@
 {
     "name": "lzomedia/groupsextractor",
-    "description": "Laravel 5.4 user groups package",
+    "description": "PHP Groups Extractor",
     "license": "MIT",
     "keywords": [
-        "laravel",
         "groups",
         "conversations"
     ],
@@ -15,7 +14,6 @@
     ],
     "minimum-stability": "dev",
     "require": {
-        "illuminate/support": "^5.4"
     },
     "autoload": {
         "psr-4": {
