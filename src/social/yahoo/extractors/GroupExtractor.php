@@ -159,7 +159,7 @@ class GroupExtractor extends Extractor implements GroupInterface
             }
 
 
-            if($i == 1000){
+            if($i == 7000){
 
                 return ($results);
 
@@ -227,7 +227,7 @@ class GroupExtractor extends Extractor implements GroupInterface
 
         $group->setDescription(@$groupJson->desc);
 
-        $group->setCover(@$groupJson->photoUrl);
+        $group->setImage(@$groupJson->photoUrl);
 
         $group->setGroupId(@$groupJson->group_id);
 

@@ -13,7 +13,7 @@ class Group
 
     public $description;
 
-    public $cover;
+    public $image;
 
     public $feed;
 
@@ -53,17 +53,18 @@ class Group
     /**
      * @return mixed
      */
-    public function getCover()
+    public function getImage()
     {
-        return $this->cover;
+        return $this->image;
     }
 
     /**
-     * @param mixed $cover
+     * @method setImage
+     * @param mixed $image
      */
-    public function setCover($cover)
+    public function setImage($image)
     {
-        $this->cover = $cover;
+        $this->image = $image;
     }
 
     /**
