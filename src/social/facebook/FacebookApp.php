@@ -5,7 +5,7 @@ namespace LzoMedia\GroupsExtractor\Social\Facebook;
 use LzoMedia\GroupsExtractor\Managers\ClientManager;
 
 
-use LzoMedia\GroupsExtractor\Social\Facebook\Extractors\Extractor;
+use LzoMedia\GroupsExtractor\Classes\Extractor;
 
 /**
  * Created by PhpStorm.
@@ -58,16 +58,9 @@ class FacebookApp extends ClientManager
      * @param \Extractor $type
      * @return mixed
      */
-    public function process(Extractor $type)
+    public function process()
     {
-        if($type == false){
-
-            return $this->type->process();
-
-        }else{
-
-            return $type->process();
-        }
+        return $this->type->process();
 
     }
 

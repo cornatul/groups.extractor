@@ -8,8 +8,7 @@
 namespace LzoMedia\GroupsExtractor\Social\Yahoo;
 
 use LzoMedia\GroupsExtractor\Managers\ClientManager;
-use LzoMedia\GroupsExtractor\Social\Yahoo\Extractors\Extractor;
-
+use LzoMedia\GroupsExtractor\Classes\Extractor;
 
 /**
  * Class YahooApp

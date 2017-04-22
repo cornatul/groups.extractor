@@ -4,8 +4,7 @@ namespace LzoMedia\GroupsExtractor\Social\Yahoo\Extractors;
 
 use LzoMedia\GroupsExtractor\Interfaces\GroupInterface;
 use LzoMedia\GroupsExtractor\Objects\Group;
-use LzoMedia\GroupsExtractor\Social\Yahoo\Extractors\Extractor;
-
+use LzoMedia\GroupsExtractor\Classes\Extractor;
 
 /**
  * Created by PhpStorm.
@@ -159,7 +158,7 @@ class GroupExtractor extends Extractor implements GroupInterface
             }
 
 
-            if($i == 7000){
+            if($i == 100){
 
                 return ($results);
 
@@ -226,6 +225,12 @@ class GroupExtractor extends Extractor implements GroupInterface
         $group->setName(@$groupJson->name);
 
         $group->setDescription(@$groupJson->desc);
+
+        if(@$groupJson->photoUrl != ''){
+
+            $groupJson->photoUrl = str_replace('=tn', '=hr', $groupJson->photoUrl);
+
+        }
 
         $group->setImage(@$groupJson->photoUrl);
 

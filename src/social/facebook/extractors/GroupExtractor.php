@@ -4,6 +4,10 @@ namespace LzoMedia\GroupsExtractor\Social\Facebook\Extractors;
 
 use LzoMedia\GroupsExtractor\Social\Facebook\FacebookApp;
 
+use LzoMedia\GroupsExtractor\Objects\Group;
+
+use LzoMedia\GroupsExtractor\Classes\Extractor;
+
 /**
  * Created by PhpStorm.
  * User: lzo
@@ -17,7 +21,9 @@ class GroupExtractor extends Extractor
 
     public $fields = [
         'name',
-        'description'
+        'description',
+        'cover',
+
     ];
 
 
@@ -96,8 +102,57 @@ class GroupExtractor extends Extractor
 
             }
 
-            return $response_data;
+            $objects = [];
+            foreach ($response_data as $group){
+
+                $objects[] = $this->generateGroup($group);
+
+            }
+
+            return $objects;
         }
 
     }
+
+
+
+    /**
+     * @method generateGroup
+     * @param $groupJson
+     * @return Group
+     */
+    function generateGroup($groupJson = '')
+    {
+
+
+        $group = new Group();
+
+        $group->setName(@$groupJson['name']);
+
+        $group->setDescription(@$groupJson['description']);
+
+        if($groupJson['cover']['source']){
+
+            //@todo move logic inside the extractor class
+
+            $path = explode('?',$groupJson['cover']['source']);
+
+            $filename = basename($path[0]);
+
+            Image::make($groupJson['cover']['source'])
+
+                ->save(public_path('storage/app/media/' . $filename));
+
+        }
+
+
+        $group->setImage(@$groupJson['cover']['source']);
+
+        $group->setGroupId(@$groupJson['id']);
+
+        return $group;
+
+
+    }
+
 }
