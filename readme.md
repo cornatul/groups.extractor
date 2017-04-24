@@ -2,7 +2,6 @@
 
 Our system provides an simple way to extract facebook groups and yahoo groups using developer key for facebook and no key for yahoo
 
-[code]
 
     //init the client
     $client = new ClientManager();
@@ -24,4 +23,8 @@ Our system provides an simple way to extract facebook groups and yahoo groups us
     // return groups
     return $groups;
     
-[/code]
+
+Todo
+1. Implement url for groups
+2. Add new providers
+3. Improve speed
