@@ -78,10 +78,9 @@ class GroupsExtractorServiceProvider extends ServiceProvider
             $client->process();
 
             //gets the response
-            $results = $client->getResponse();
+            $response = $client->getResponse();
 
-
-            dd($results);
+            dd($response);
 
 
         });

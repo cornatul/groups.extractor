@@ -13,7 +13,7 @@ class Group
 
     public $description;
 
-    public $image;
+    public $image = false;
 
     public $feed;
 

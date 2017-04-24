@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\File;
  * Date: 30/03/17
  * Time: 08:29
  */
-class GroupExtractor extends Extractor implements GroupInterface,RemoteImageInterface
+class GroupExtractor extends Extractor implements GroupInterface
 {
 
     protected $extractor;
@@ -145,6 +145,8 @@ class GroupExtractor extends Extractor implements GroupInterface,RemoteImageInte
     public function process()
     {
 
+        //@todo modify this according to the facebook group extractor using a response
+
         $results = [];
 
         $i = 9;
@@ -241,16 +243,13 @@ class GroupExtractor extends Extractor implements GroupInterface,RemoteImageInte
 
         $group = new Group();
 
-        $group->setName(@$groupJson->name);
+
+        $group->setName(str_replace(['_','-'], ' ', @$groupJson->name));
+
 
         $group->setDescription(@$groupJson->desc);
 
 
-        if(@$groupJson->photoUrl != ''){
-
-            $groupJson->photoUrl = str_replace('=tn', '=hr', $groupJson->photoUrl);
-
-        }
 
         if($groupJson->restricted == 'RESTRICTED'){
 
@@ -265,55 +264,19 @@ class GroupExtractor extends Extractor implements GroupInterface,RemoteImageInte
 
         $group->setGroupId(@$groupJson->groupId);
 
-        if($this->saveRemoteImages == true){
+        if(isset($groupJson->photoUrl)){
 
-            $group->setImage($this->saveImage(@$groupJson->photoUrl));
-
-        }else{
-
-            $group->setImage('default-group.jpg');
+            $group->setImage($groupJson->photoUrl);
 
         }
+
+
 
         $group->setType('yahoo');
 
-        $group->setGroupId(@$groupJson->groupId);
 
         return $group;
 
-
     }
 
-
-    /**
-     * @param $image_source
-     * @return mixed
-     * @internal param $image_source
-     */
-    public function saveImage($image_source)
-    {
-        // TODO: Implement saveImage() method.
-        $path = explode('?', $image_source);
-
-        if(is_array($path)){
-
-            $filename = basename($path[0]);
-
-            if (!File::exists(public_path('storage/app/media/' . $filename))) {
-
-
-                $saved = \Image::make($path[0])->save(public_path('storage/app/media/' . $filename));
-
-                return $saved == true ? public_path('storage/app/media/' . $filename) : null;
-
-            }
-
-
-        }else{
-
-            return null;
-
-        }
-
-    }
 }
