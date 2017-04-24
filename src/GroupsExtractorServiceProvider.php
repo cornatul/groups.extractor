@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Route;
 use LzoMedia\GroupsExtractor\Managers\ClientManager;
 
 use LzoMedia\GroupsExtractor\Social\Facebook\Extractors\FeedExtractor;
+use LzoMedia\GroupsExtractor\Social\Facebook\Extractors\GroupExtractor;
 use LzoMedia\GroupsExtractor\Social\Facebook\FacebookApp;
 use LzoMedia\GroupsExtractor\Social\Yahoo\YahooApp;
 use LzoMedia\GroupsExtractor\Social\Yahoo\Extractors\GroupExtractor as YahooGroupExtractor;
@@ -60,9 +61,12 @@ class GroupsExtractorServiceProvider extends ServiceProvider
             $socialType = new FacebookApp($token);
 
             //Type of extractor
-            $typeOfDataToExtract = new FeedExtractor();
+            $typeOfDataToExtract = new GroupExtractor();
 
-            $typeOfDataToExtract->setEndpoint('674889555919981');
+            //$typeOfDataToExtract->setEndpoint('368215273251493');
+
+            //set the limit
+            //$typeOfDataToExtract->setLimitPages(2);
 
             //extractor type should be a interface up
             $socialType->setExtractorType($typeOfDataToExtract);
@@ -70,10 +74,28 @@ class GroupsExtractorServiceProvider extends ServiceProvider
             // set socialType
             $client->setSocialType($socialType);
 
-            $groups  = ($client->process());
+            //process
+            $client->process();
 
-            return $groups;
+            //gets the response
+            //$results = $client->getResponse();
 
+            dd($client->process());
+
+
+            do{
+
+                foreach ($results as $key =>  $result){
+
+                    if($key == 25){
+
+                        dd($result);
+
+                    }
+
+                }
+
+            }while(count($client->getResponse()) > 0);
 
         });
     }

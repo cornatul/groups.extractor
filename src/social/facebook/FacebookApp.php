@@ -22,6 +22,9 @@ class FacebookApp extends ClientManager
     public $url = 'https://graph.facebook.com/v1.0/';
 
 
+    public $responseData;
+
+
     /**
      * FacebookApp constructor.
      * @param $token
@@ -57,6 +60,14 @@ class FacebookApp extends ClientManager
 
        return  $this->type = $type;
 
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getResponse()
+    {
+       return $this->type->responseData;
     }
 
     /**

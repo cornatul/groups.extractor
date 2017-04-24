@@ -16,6 +16,8 @@ class ClientManager implements SocialExtractorInterface
 {
     protected $clientType;
 
+    protected $response;
+
     /**
      * @param ClientManager $type
      * @return ClientManager
@@ -32,6 +34,16 @@ class ClientManager implements SocialExtractorInterface
     {
         return $this->clientType;
     }
+
+
+    /**
+     * @return mixed
+     */
+    public function getResponse()
+    {
+        return array_collapse($this->clientType->getResponse());
+    }
+
 
     /**
      * @return mixed

@@ -23,7 +23,39 @@ class Group
 
     public $privacy;
 
+    public $type;
+
+
+
     /**
+     * Group constructor.
+     */
+    public function __construct()
+    {
+        return $this;
+    }
+
+    /**
+     * @method setType
+     * @param mixed $type
+     */
+    public function setType($type)
+    {
+        $this->type = $type;
+    }
+
+
+    /**
+     * @method getType
+     * @return mixed
+     */
+    public function getType()
+    {
+        return $this->type;
+    }
+
+    /**
+     * @method getPrivacy
      * @return mixed
      */
     public function getPrivacy()
@@ -33,6 +65,7 @@ class Group
 
 
     /**
+     * @method setPrivacy
      * @param mixed $privacy
      */
     public function setPrivacy($privacy)
@@ -44,6 +77,7 @@ class Group
 
 
     /**
+     * @method getGroupId
      * @return mixed
      */
     public function getGroupId()
@@ -53,6 +87,7 @@ class Group
 
 
     /**
+     * @method setGroupId
      * @param mixed $group_id
      */
     public function setGroupId($group_id)
@@ -62,16 +97,10 @@ class Group
         return $this;
     }
 
-    /**
-     * Group constructor.
-     */
-    public function __construct()
-    {
-        return $this;
-    }
 
 
     /**
+     * @method getImage
      * @return mixed
      */
     public function getImage()
@@ -112,7 +141,7 @@ class Group
 
 
     /**
-     *
+     * @method setFeed
      * @param mixed $feed
      * @return $this
      */
@@ -136,6 +165,7 @@ class Group
     }
 
     /**
+     * @method getDescription
      * @return mixed
      */
     public function getDescription()

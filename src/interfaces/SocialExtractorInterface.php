@@ -23,4 +23,5 @@ interface SocialExtractorInterface
     public function setSocialType(ClientManager $type);
     public function getSocialType();
 
+
 }

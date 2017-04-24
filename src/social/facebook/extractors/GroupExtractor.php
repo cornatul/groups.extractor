@@ -150,6 +150,8 @@ class GroupExtractor extends Extractor implements GroupInterface,RemoteImageInte
 
         $group->setName(@$groupJson['name']);
 
+
+
         $group->setDescription(@$groupJson['description']);
 
         if(@$groupJson['cover']['source']){

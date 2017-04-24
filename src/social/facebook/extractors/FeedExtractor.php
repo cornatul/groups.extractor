@@ -4,9 +4,14 @@ namespace LzoMedia\GroupsExtractor\Social\Facebook\Extractors;
 
 
 use LzoMedia\GroupsExtractor\Classes\Extractor;
+use LzoMedia\GroupsExtractor\Interfaces\MessageInterface;
+use LzoMedia\GroupsExtractor\Objects\Post;
 
-class FeedExtractor extends Extractor{
+class FeedExtractor extends Extractor implements MessageInterface {
 
+    public $responseData = [];
+
+    protected $limitPages = 10;
 
     /**
      * @var
@@ -20,7 +25,7 @@ class FeedExtractor extends Extractor{
         'story',
         'message',
         'type',
-        'picture',
+        'full_picture',
         'link',
         'source',
         'description',
@@ -70,9 +75,13 @@ class FeedExtractor extends Extractor{
     }
 
 
+    /**
+     * @return array|\Illuminate\Support\Collection
+     * @throws \Exception
+     */
     function process()
     {
-        $response_data = [];
+        $this->responseData = collect([]);
 
         $data =  file_get_contents($this->getUrl().$this->getEndpoint().$this->getFields().$this->getToken());
 
@@ -89,9 +98,24 @@ class FeedExtractor extends Extractor{
                 throw new \Exception('The response data from facebook is null');
             }
 
+
+            $ar = [];
+            foreach ($data['data'] as $post){
+
+                // todo implement post creator and push to array
+
+
+                $ar[] = (($post));
+
+                $this->responseData->push($this->generatePost($post));
+
+            }
+
+
+            dd($ar, $this->responseData->all());
+
             $exists = array_key_exists("next", @$data['paging']);
 
-            $response_data = array_merge($response_data, $data['data']);
 
             while ($exists == true) {
 
@@ -106,25 +130,77 @@ class FeedExtractor extends Extractor{
 
                     $data = json_decode(($data), true);
 
-                    $response_data = array_merge($response_data, $data["data"]);
+
+                    foreach ($data['data'] as $post){
+
+                        // todo implement post creator and push to array
 
 
+                        $this->responseData->push($this->generatePost($post));
+
+                    }
+
+
+
+
+                    if(($this->responseData->count()) == $this->limitPages){
+
+                        return array_collapse($this->responseData->all());
+
+                    }
                 }
 
+
             }
 
 
-            dd($response_data);
 
-            if(count($response_data) == 100){
-                dd($response_data);
-            }
-
-            return $response_data;
+            return array_collapse($this->responseData->all());
 
         }
 
     }
 
+
+    /**
+     * @return int
+     */
+    public function getLimitPages()
+    {
+        return $this->limitPages;
+    }
+
+
+    /**
+     * @param int $limitPages
+     */
+    public function setLimitPages($limitPages)
+    {
+        $this->limitPages = $limitPages;
+    }
+
+
+    /**
+     * @param $data
+     * @return Post
+     */
+    public function generatePost($data)
+    {
+
+        $post = new Post();
+
+        $post->setGroupId(intval($this->getEndpoint()));
+
+        $post->setType(@$data['type']);
+
+        $post->setLink(@$data['link']);
+
+        $post->setMessage(@$data['story'].@$data['description'].@$data['message']);
+
+        $post->setImage(@$data['full_picture']);
+
+
+        return $post;
+    }
 
 }

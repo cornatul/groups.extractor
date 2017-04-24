@@ -8,6 +8,7 @@ class GroupsExtractor
 
     protected $type;
 
+
     function __construct($type)
     {
         $this->type = $type;
@@ -15,6 +16,7 @@ class GroupsExtractor
 
 
     /**
+     * @method getType
      * @return mixed
      */
     public function getType()
@@ -23,7 +25,13 @@ class GroupsExtractor
     }
 
 
+    //@todo this can be an entry point for entire app
+
+    /**
+     * @method process
+     */
     public function process(){
+
 
     }
 
