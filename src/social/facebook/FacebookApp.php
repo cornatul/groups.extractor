@@ -22,7 +22,10 @@ class FacebookApp extends ClientManager
     public $url = 'https://graph.facebook.com/v1.0/';
 
 
-
+    /**
+     * FacebookApp constructor.
+     * @param $token
+     */
     function __construct($token)
     {
         $this->token = $token;
@@ -31,6 +34,7 @@ class FacebookApp extends ClientManager
 
     /**
      * @return mixed
+     * method getToken
      */
     public function getToken()
     {
@@ -39,6 +43,7 @@ class FacebookApp extends ClientManager
 
 
     /**
+     * @method setExtractorType
      * @param mixed $type
      */
     public function setExtractorType(Extractor $type)

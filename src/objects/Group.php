@@ -21,6 +21,27 @@ class Group
 
     public $group_id;
 
+    public $privacy;
+
+    /**
+     * @return mixed
+     */
+    public function getPrivacy()
+    {
+        return $this->privacy;
+    }
+
+
+    /**
+     * @param mixed $privacy
+     */
+    public function setPrivacy($privacy)
+    {
+        $this->privacy = $privacy;
+
+        return $this;
+    }
+
 
     /**
      * @return mixed

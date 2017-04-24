@@ -13,10 +13,12 @@ interface GroupInterface
 {
 
     /**
+     * @method generateGroup
      * @param $group
      * @return mixed
      * @internal param $type
      */
     public function generateGroup($group);
+
 
 }

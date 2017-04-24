@@ -3,8 +3,11 @@
 namespace LzoMedia\GroupsExtractor\Social\Yahoo\Extractors;
 
 use LzoMedia\GroupsExtractor\Interfaces\GroupInterface;
+use LzoMedia\GroupsExtractor\Interfaces\RemoteImageInterface;
 use LzoMedia\GroupsExtractor\Objects\Group;
 use LzoMedia\GroupsExtractor\Classes\Extractor;
+
+use Illuminate\Support\Facades\File;
 
 /**
  * Created by PhpStorm.
@@ -12,7 +15,7 @@ use LzoMedia\GroupsExtractor\Classes\Extractor;
  * Date: 30/03/17
  * Time: 08:29
  */
-class GroupExtractor extends Extractor implements GroupInterface
+class GroupExtractor extends Extractor implements GroupInterface,RemoteImageInterface
 {
 
     protected $extractor;
@@ -33,7 +36,12 @@ class GroupExtractor extends Extractor implements GroupInterface
 
     protected $limit = 10;
 
+    protected $saveRemoteImages = false;
+
+
+
     /**
+     * @method getSortBy
      * @param $limit
      * @return string
      */
@@ -52,6 +60,7 @@ class GroupExtractor extends Extractor implements GroupInterface
 
 
     /**
+     * @method getLimit
      * @return int
      */
     public function getLimit()
@@ -60,6 +69,7 @@ class GroupExtractor extends Extractor implements GroupInterface
     }
 
     /**
+     * @method setLimit
      * @param int $limit
      */
     public function setLimit()
@@ -68,6 +78,7 @@ class GroupExtractor extends Extractor implements GroupInterface
     }
 
     /**
+     * method getQuery
      * @return string
      */
     public function getQuery()
@@ -76,6 +87,7 @@ class GroupExtractor extends Extractor implements GroupInterface
     }
 
     /**
+     * @method setQuery
      * @param string $query
      */
     public function setQuery($query)
@@ -85,6 +97,7 @@ class GroupExtractor extends Extractor implements GroupInterface
 
 
     /**
+     * @method getEndpoint
      * @return mixed
      */
     public function getEndpoint()
@@ -95,6 +108,7 @@ class GroupExtractor extends Extractor implements GroupInterface
 
 
     /**
+     * @method getMaxHits
      * @return string
      */
     public function getMaxHits()
@@ -103,6 +117,7 @@ class GroupExtractor extends Extractor implements GroupInterface
     }
 
     /**
+     * @method getOffset
      * @return int
      */
     public function getOffset()
@@ -111,6 +126,7 @@ class GroupExtractor extends Extractor implements GroupInterface
     }
 
     /**
+     * @method setOffset
      * @param int $offset
      */
     public function setOffset($offset)
@@ -119,12 +135,15 @@ class GroupExtractor extends Extractor implements GroupInterface
     }
 
 
+
+
+
     /***
+     * @method process
      * @return string
      */
     public function process()
     {
-
 
         $results = [];
 
@@ -150,15 +169,13 @@ class GroupExtractor extends Extractor implements GroupInterface
 
                 foreach ($check->ygData->groups as $group){
 
-                    if($group->restricted == 'OPEN'){
+                    $results[] = $this->generateGroup($group);
 
-                        $results[] = $this->generateGroup($group);
-                    }
                 }
             }
 
 
-            if($i == 100){
+            if($i == 10){
 
                 return ($results);
 
@@ -175,6 +192,7 @@ class GroupExtractor extends Extractor implements GroupInterface
 
 
     /**
+     * @method getTotal
      * @param  $total
      * @return int
      */
@@ -184,6 +202,7 @@ class GroupExtractor extends Extractor implements GroupInterface
     }
 
     /**
+     * @method setTotal
      * @param int $total
      */
     public function setTotal($total)
@@ -226,15 +245,38 @@ class GroupExtractor extends Extractor implements GroupInterface
 
         $group->setDescription(@$groupJson->desc);
 
+
         if(@$groupJson->photoUrl != ''){
 
             $groupJson->photoUrl = str_replace('=tn', '=hr', $groupJson->photoUrl);
 
         }
 
-        $group->setImage(@$groupJson->photoUrl);
+        if($groupJson->restricted == 'RESTRICTED'){
 
-        $group->setGroupId(@$groupJson->group_id);
+            $group->setPrivacy(1);
+
+        }else{
+
+            $group->setPrivacy(0);
+
+        }
+
+
+        $group->setGroupId(@$groupJson->groupId);
+
+        if($this->saveRemoteImages == true){
+
+            $group->setImage($this->saveImage(@$groupJson->photoUrl));
+
+        }else{
+
+            $group->setImage('default-group.jpg');
+
+        }
+
+
+        $group->setGroupId(@$groupJson->groupId);
 
         return $group;
 
@@ -242,4 +284,35 @@ class GroupExtractor extends Extractor implements GroupInterface
     }
 
 
+    /**
+     * @param $image_source
+     * @return mixed
+     * @internal param $image_source
+     */
+    public function saveImage($image_source)
+    {
+        // TODO: Implement saveImage() method.
+        $path = explode('?', $image_source);
+
+        if(is_array($path)){
+
+            $filename = basename($path[0]);
+
+            if (!File::exists(public_path('storage/app/media/' . $filename))) {
+
+
+                $saved = \Image::make($path[0])->save(public_path('storage/app/media/' . $filename));
+
+                return $saved == true ? public_path('storage/app/media/' . $filename) : null;
+
+            }
+
+
+        }else{
+
+            return null;
+
+        }
+
+    }
 }

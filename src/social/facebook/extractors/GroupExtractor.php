@@ -2,11 +2,15 @@
 
 namespace LzoMedia\GroupsExtractor\Social\Facebook\Extractors;
 
+use League\Flysystem\Exception;
+use LzoMedia\GroupsExtractor\Interfaces\GroupInterface;
+use LzoMedia\GroupsExtractor\Interfaces\RemoteImageInterface;
 use LzoMedia\GroupsExtractor\Social\Facebook\FacebookApp;
 
 use LzoMedia\GroupsExtractor\Objects\Group;
 
 use LzoMedia\GroupsExtractor\Classes\Extractor;
+use Illuminate\Support\Facades\File;
 
 /**
  * Created by PhpStorm.
@@ -14,11 +18,20 @@ use LzoMedia\GroupsExtractor\Classes\Extractor;
  * Date: 30/03/17
  * Time: 08:29
  */
-class GroupExtractor extends Extractor
+class GroupExtractor extends Extractor implements GroupInterface,RemoteImageInterface
 {
 
+    /**
+     * @var
+     */
     protected $extractor;
 
+
+    protected $saveRemoteImages = false;
+
+    /**
+     * @var array
+     */
     public $fields = [
         'name',
         'description',
@@ -26,16 +39,22 @@ class GroupExtractor extends Extractor
 
     ];
 
-
+    /**
+     * @var string
+     */
     public $endpoint = '/me/groups';
 
 
+    /**
+     * GroupExtractor constructor.
+     */
     public function __construct()
     {
     }
 
     /**
-     * @return array
+     * @method getFields
+     * @return string
      */
     public function getFields()
     {
@@ -44,6 +63,7 @@ class GroupExtractor extends Extractor
 
 
     /**
+     * @method getEndpoint
      * @return string
      */
     public function getEndpoint()
@@ -55,7 +75,8 @@ class GroupExtractor extends Extractor
     /***
      * @method process
      * @class GroupExtractor
-     * @return string
+     * @throws \Exception
+     * @return array
      */
     public function process()
     {
@@ -103,6 +124,7 @@ class GroupExtractor extends Extractor
             }
 
             $objects = [];
+
             foreach ($response_data as $group){
 
                 $objects[] = $this->generateGroup($group);
@@ -124,29 +146,27 @@ class GroupExtractor extends Extractor
     function generateGroup($groupJson = '')
     {
 
-
         $group = new Group();
 
         $group->setName(@$groupJson['name']);
 
         $group->setDescription(@$groupJson['description']);
 
-        if($groupJson['cover']['source']){
+        if(@$groupJson['cover']['source']){
 
-            //@todo move logic inside the extractor class
 
-            $path = explode('?',$groupJson['cover']['source']);
+            if($this->saveRemoteImages == true){
 
-            $filename = basename($path[0]);
+                $group->setImage($this->saveImage($groupJson['cover']['source']));
 
-            Image::make($groupJson['cover']['source'])
+            }else{
 
-                ->save(public_path('storage/app/media/' . $filename));
+                $group->setImage(($groupJson['cover']['source']));
+            }
+
+
 
         }
-
-
-        $group->setImage(@$groupJson['cover']['source']);
 
         $group->setGroupId(@$groupJson['id']);
 
@@ -155,4 +175,38 @@ class GroupExtractor extends Extractor
 
     }
 
+    /**
+     * @method saveImage
+     * @param $image_source
+     * @return mixed
+     * @internal param $image_source
+     */
+    public function saveImage($image_source)
+    {
+
+        //@todo improve this to have a config file to set the storing location
+
+        $path = explode('?', $image_source);
+
+        if(is_array($path)){
+
+            $filename = basename($path[0]);
+
+            if (!File::exists(public_path('storage/app/media/' . $filename))) {
+
+
+                $saved = \Image::make($image_source)->save(public_path('storage/app/media/' . $filename));
+
+                return $saved == true ? public_path('storage/app/media/' . $filename) : null;
+
+            }
+
+
+        }else{
+
+            return null;
+
+        }
+
+    }
 }
