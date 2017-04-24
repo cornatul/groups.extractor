@@ -22,6 +22,7 @@ class Member
 
 
     /**
+     * @methd getPicture
      * @return mixed
      */
     public function getPicture()
@@ -30,6 +31,7 @@ class Member
     }
 
     /**
+     * @method setPicture
      * @param mixed $picture
      */
     public function setPicture($picture)
@@ -39,6 +41,7 @@ class Member
 
 
     /**
+     * @method getEmail
      * @return mixed
      */
     public function getEmail()
@@ -48,6 +51,7 @@ class Member
 
 
     /**
+     * @method setEmail
      * @param mixed $email
      */
     public function setEmail($email)
@@ -57,6 +61,7 @@ class Member
 
 
     /**
+     * @method getName
      * @return mixed
      */
     public function getName()

@@ -2,15 +2,15 @@
 
 namespace LzoMedia\GroupsExtractor\Social\Facebook\Extractors;
 
-use League\Flysystem\Exception;
-use LzoMedia\GroupsExtractor\Interfaces\GroupInterface;
-use LzoMedia\GroupsExtractor\Interfaces\RemoteImageInterface;
-use LzoMedia\GroupsExtractor\Social\Facebook\FacebookApp;
-
-use LzoMedia\GroupsExtractor\Objects\Group;
 
 use LzoMedia\GroupsExtractor\Classes\Extractor;
+use LzoMedia\GroupsExtractor\Interfaces\GroupInterface;
+use LzoMedia\GroupsExtractor\Interfaces\RemoteImageInterface;
+
+use LzoMedia\GroupsExtractor\Objects\Group;
 use Illuminate\Support\Facades\File;
+
+
 
 /**
  * Created by PhpStorm.
@@ -20,6 +20,8 @@ use Illuminate\Support\Facades\File;
  */
 class GroupExtractor extends Extractor implements GroupInterface,RemoteImageInterface
 {
+
+    public $responseData = [];
 
     /**
      * @var
@@ -81,7 +83,7 @@ class GroupExtractor extends Extractor implements GroupInterface,RemoteImageInte
     public function process()
     {
 
-        $response_data = [];
+        $this->responseData = collect([]);
 
         $data =  file_get_contents($this->getUrl().$this->getEndpoint().$this->getFields().$this->getToken());
 
@@ -99,9 +101,21 @@ class GroupExtractor extends Extractor implements GroupInterface,RemoteImageInte
                 throw new \Exception('The response data from facebook is null');
             }
 
+
+            foreach ($data['data'] as $post){
+
+
+                if (isset($post)) {
+
+                    $this->responseData->push($this->generateGroup($post));
+
+                }
+
+            }
+
+
             $exists = array_key_exists("next", @$data['paging']);
 
-            $response_data = array_merge($response_data, $data['data']);
 
             while ($exists == true) {
 
@@ -116,22 +130,20 @@ class GroupExtractor extends Extractor implements GroupInterface,RemoteImageInte
 
                     $data = json_decode(($data), true);
 
-                    $response_data = array_merge($response_data, $data["data"]);
 
+                    foreach ($data['data'] as $post){
+
+                        $this->responseData->push($this->generateGroup($post));
+
+
+                    }
 
                 }
 
             }
 
-            $objects = [];
 
-            foreach ($response_data as $group){
-
-                $objects[] = $this->generateGroup($group);
-
-            }
-
-            return $objects;
+            return $this->responseData->all();
         }
 
     }
@@ -148,29 +160,17 @@ class GroupExtractor extends Extractor implements GroupInterface,RemoteImageInte
 
         $group = new Group();
 
+        $group->setGroupId(intval($groupJson['id']));
+
         $group->setName(@$groupJson['name']);
-
-
 
         $group->setDescription(@$groupJson['description']);
 
-        if(@$groupJson['cover']['source']){
+        $group->setImage((@$groupJson['cover']['source']));
 
+        $group->setPrivacy(1);
 
-            if($this->saveRemoteImages == true){
-
-                $group->setImage($this->saveImage($groupJson['cover']['source']));
-
-            }else{
-
-                $group->setImage(($groupJson['cover']['source']));
-            }
-
-
-
-        }
-
-        $group->setGroupId(@$groupJson['id']);
+        $group->setType('facebook');
 
         return $group;
 
@@ -180,7 +180,7 @@ class GroupExtractor extends Extractor implements GroupInterface,RemoteImageInte
     /**
      * @method saveImage
      * @param $image_source
-     * @return mixed
+     * @return boolean
      * @internal param $image_source
      */
     public function saveImage($image_source)
@@ -199,14 +199,14 @@ class GroupExtractor extends Extractor implements GroupInterface,RemoteImageInte
 
                 $saved = \Image::make($image_source)->save(public_path('storage/app/media/' . $filename));
 
-                return $saved == true ? public_path('storage/app/media/' . $filename) : null;
+                return $saved == true ? public_path('storage/app/media/' . $filename) : false;
 
             }
 
 
         }else{
 
-            return null;
+            return false;
 
         }
 

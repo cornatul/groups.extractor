@@ -41,7 +41,7 @@ class ClientManager implements SocialExtractorInterface
      */
     public function getResponse()
     {
-        return array_collapse($this->clientType->getResponse());
+        return ($this->clientType->getResponse());
     }
 
 

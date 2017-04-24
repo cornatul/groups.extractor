@@ -114,7 +114,15 @@ class Group
      */
     public function setImage($image)
     {
+
+        if($image == null) {
+
+            $this->image = false;
+        }
+
         $this->image = $image;
+
+
     }
 
     /**

@@ -2,6 +2,7 @@
 
 
 namespace LzoMedia\GroupsExtractor\Social\Facebook;
+use League\Flysystem\Exception;
 use LzoMedia\GroupsExtractor\Managers\ClientManager;
 
 
@@ -28,16 +29,25 @@ class FacebookApp extends ClientManager
     /**
      * FacebookApp constructor.
      * @param $token
+     * @throws \Exception
      */
     function __construct($token)
     {
+
+        if(!isset($token)){
+
+            throw new \Exception('Please provide a facebook developer token');
+
+        }
+
         $this->token = $token;
     }
 
 
     /**
-     * @return mixed
+     *
      * method getToken
+     * @return string
      */
     public function getToken()
     {
@@ -48,9 +58,17 @@ class FacebookApp extends ClientManager
     /**
      * @method setExtractorType
      * @param mixed $type
+     * @return object Extractor
+     * @throws \Exception
      */
     public function setExtractorType(Extractor $type)
     {
+
+       if(!isset($type)){
+
+           throw new  \Exception('Please provide an extractor type');
+
+       }
 
        $type->setType($type);
 
@@ -63,6 +81,7 @@ class FacebookApp extends ClientManager
     }
 
     /**
+     * @method getResponse
      * @return mixed
      */
     public function getResponse()
@@ -71,7 +90,7 @@ class FacebookApp extends ClientManager
     }
 
     /**
-     * @param \Extractor $type
+     * @method process
      * @return mixed
      */
     public function process()

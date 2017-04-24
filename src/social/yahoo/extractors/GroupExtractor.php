@@ -275,6 +275,7 @@ class GroupExtractor extends Extractor implements GroupInterface,RemoteImageInte
 
         }
 
+        $group->setType('yahoo');
 
         $group->setGroupId(@$groupJson->groupId);
 

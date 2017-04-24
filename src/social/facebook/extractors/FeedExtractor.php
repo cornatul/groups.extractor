@@ -9,9 +9,15 @@ use LzoMedia\GroupsExtractor\Objects\Post;
 
 class FeedExtractor extends Extractor implements MessageInterface {
 
+    /**
+     * @var array
+     */
     public $responseData = [];
 
-    protected $limitPages = 10;
+    /**
+     * @var int
+     */
+    protected $limitPages = 2;
 
     /**
      * @var
@@ -46,6 +52,8 @@ class FeedExtractor extends Extractor implements MessageInterface {
     {
     }
 
+
+
     /**
      * @method getFields
      * @return string
@@ -67,7 +75,9 @@ class FeedExtractor extends Extractor implements MessageInterface {
 
 
     /**
+     * @method setEndpoint
      * @param string $endpoint
+     * @return string
      */
     public function setEndpoint($endpoint)
     {
@@ -83,7 +93,10 @@ class FeedExtractor extends Extractor implements MessageInterface {
     {
         $this->responseData = collect([]);
 
-        $data =  file_get_contents($this->getUrl().$this->getEndpoint().$this->getFields().$this->getToken());
+        $data =  file_get_contents($this->getUrl().
+                                    $this->getEndpoint().
+                                    $this->getFields().
+                                    $this->getToken());
 
         if ( $data === false )
         {
@@ -96,58 +109,54 @@ class FeedExtractor extends Extractor implements MessageInterface {
             if(!array_key_exists('data',$data)){
 
                 throw new \Exception('The response data from facebook is null');
+
             }
 
 
-            $ar = [];
+
             foreach ($data['data'] as $post){
 
-                // todo implement post creator and push to array
-
-
-                $ar[] = (($post));
 
                 $this->responseData->push($this->generatePost($post));
 
             }
 
 
-            dd($ar, $this->responseData->all());
-
             $exists = array_key_exists("next", @$data['paging']);
 
 
             while ($exists == true) {
 
-                if (strlen(@$data['paging']['next']) == 0) {
+                if(!isset($data['paging']['next'])){
+
+                    break;
+
+                }
+
+                if (strlen($data['paging']['next']) == 0) {
 
                     break;
 
                 } else {
 
 
-                    $data = file_get_contents(@$data['paging']['next']);
+                    $data = file_get_contents($data['paging']['next']);
 
                     $data = json_decode(($data), true);
 
 
                     foreach ($data['data'] as $post){
 
-                        // todo implement post creator and push to array
-
-
                         $this->responseData->push($this->generatePost($post));
 
                     }
 
-
-
-
                     if(($this->responseData->count()) == $this->limitPages){
 
-                        return array_collapse($this->responseData->all());
+                        return ($this->responseData->all());
 
                     }
+
                 }
 
 
@@ -155,7 +164,7 @@ class FeedExtractor extends Extractor implements MessageInterface {
 
 
 
-            return array_collapse($this->responseData->all());
+            return ($this->responseData->all());
 
         }
 
@@ -163,6 +172,7 @@ class FeedExtractor extends Extractor implements MessageInterface {
 
 
     /**
+     * @method getLimitPages
      * @return int
      */
     public function getLimitPages()
@@ -172,6 +182,7 @@ class FeedExtractor extends Extractor implements MessageInterface {
 
 
     /**
+     * @method setLimitPages
      * @param int $limitPages
      */
     public function setLimitPages($limitPages)
@@ -181,6 +192,7 @@ class FeedExtractor extends Extractor implements MessageInterface {
 
 
     /**
+     * @method generatePost
      * @param $data
      * @return Post
      */

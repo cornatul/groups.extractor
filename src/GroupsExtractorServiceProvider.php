@@ -61,12 +61,12 @@ class GroupsExtractorServiceProvider extends ServiceProvider
             $socialType = new FacebookApp($token);
 
             //Type of extractor
-            $typeOfDataToExtract = new GroupExtractor();
+            $typeOfDataToExtract = new FeedExtractor();
 
-            //$typeOfDataToExtract->setEndpoint('368215273251493');
+            $typeOfDataToExtract->setEndpoint('368215273251493');
 
             //set the limit
-            //$typeOfDataToExtract->setLimitPages(2);
+            $typeOfDataToExtract->setLimitPages(2);
 
             //extractor type should be a interface up
             $socialType->setExtractorType($typeOfDataToExtract);
@@ -78,24 +78,11 @@ class GroupsExtractorServiceProvider extends ServiceProvider
             $client->process();
 
             //gets the response
-            //$results = $client->getResponse();
-
-            dd($client->process());
+            $results = $client->getResponse();
 
 
-            do{
+            dd($results);
 
-                foreach ($results as $key =>  $result){
-
-                    if($key == 25){
-
-                        dd($result);
-
-                    }
-
-                }
-
-            }while(count($client->getResponse()) > 0);
 
         });
     }
