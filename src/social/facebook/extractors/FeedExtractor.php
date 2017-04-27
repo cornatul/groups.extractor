@@ -188,6 +188,7 @@ class FeedExtractor extends Extractor implements MessageInterface {
     public function setLimitPages($limitPages)
     {
         $this->limitPages = $limitPages;
+
     }
 
 
@@ -198,6 +199,7 @@ class FeedExtractor extends Extractor implements MessageInterface {
      */
     public function generatePost($data)
     {
+        //<editor-fold desc="the body method">
 
         $post = new Post();
 
@@ -213,6 +215,8 @@ class FeedExtractor extends Extractor implements MessageInterface {
 
 
         return $post;
+        //</editor-fold>
+
     }
 
 }

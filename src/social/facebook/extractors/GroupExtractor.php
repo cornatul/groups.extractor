@@ -186,8 +186,6 @@ class GroupExtractor extends Extractor implements GroupInterface,RemoteImageInte
     public function saveImage($image_source)
     {
 
-        //@todo improve this to have a config file to set the storing location
-
         $path = explode('?', $image_source);
 
         if(is_array($path)){

@@ -6,6 +6,8 @@ use Illuminate\Support\ServiceProvider;
 
 use Illuminate\Support\Facades\Route;
 
+use LzoMedia\GroupsExtractor\Classes\Processor;
+use LzoMedia\GroupsExtractor\Clients\Client;
 use LzoMedia\GroupsExtractor\Managers\ClientManager;
 
 use LzoMedia\GroupsExtractor\Social\Facebook\Extractors\FeedExtractor;
@@ -54,7 +56,7 @@ class GroupsExtractorServiceProvider extends ServiceProvider
 
         Route::get('/facebook/{token}', function ($token){
 
-            //client
+            //client test
             $client = new ClientManager();
 
             //start the Yahoo
@@ -84,6 +86,32 @@ class GroupsExtractorServiceProvider extends ServiceProvider
 
 
         });
+
+        Route::get('/test/{token}', function ($token){
+
+
+            $client = new Client();
+
+            $facebook = new Facebook\Facebook();
+
+            $group = new FacebookGroupsExtractor();
+
+            $processor = new Processor();
+
+            $group->setToken($token);
+
+            $client->setApp($facebook);
+
+            $client->setType($group);
+
+            $client->process($processor);
+
+
+
+
+        });
+
+
     }
 
     /**
@@ -92,7 +120,7 @@ class GroupsExtractorServiceProvider extends ServiceProvider
     public function register()
     {
         $this->app->bind('groupsextractor', function () {
-            return $this->app->make('LzoMedia\GroupsExtractor\GroupExtractor');
+            return $this->app->make('LzoMedia\GroupsExtractor\FacebookGroupsExtractor');
         });
     }
 

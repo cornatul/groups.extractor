@@ -22,7 +22,6 @@ class FacebookApp extends ClientManager
 
     public $url = 'https://graph.facebook.com/v1.0/';
 
-
     public $responseData;
 
 
