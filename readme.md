@@ -25,4 +25,10 @@ Our system provides an simple way to extract facebook groups and yahoo groups us
     
 
 Todo
+
 1. Task 1
+=======
+1. Implement url for groups
+2. Add new providers
+3. Improve speed
+4. Rest

@@ -1,33 +1,25 @@
 {
-  "name": "lzomedia/groups-extractor",
-  "description": "Official Lzo Media ",
+  "name": "lzomedia/groups.extractor",
+  "description": "Unofficial package of jsmin-php",
   "homepage": "http://www.github.com/lzomedia/groups.extractor",
-  "keywords": [
-    "minify",
-    "jsmin",
-    "javascript"
-  ],
+
+  "keywords": ["minify", "jsmin", "javascript"],
   "type": "library",
   "authors": [
     {
-      "name": "Joost Faassen",
-      "email": "j.faassen@linkorb.com",
+      "name": "Stefan Izdrail",
+      "email": "stefan@lzo.ro",
       "role": "Packaging for composer"
     }
   ],
   "require": {
     "php": ">=7.0.0",
+    "illuminate/support": "^5.4",
     "guzzlehttp/guzzle": "^6.2"
+
   },
   "autoload": {
-    "classmap": [
-      "src/"
-    ]
-  },
-  "require-dev": {
-    "fzaninotto/faker": "~1.4",
-    "bvanhoekelen/performance": "^2.3",
-    "phpunit/phpunit": "7"
+    "classmap": ["src/"]
   },
   "license": "MIT"
 }
