@@ -1,7 +1,7 @@
 {
   "name": "lzomedia/groups.extractor",
-  "description": "Unofficial package of jsmin-php",
-  "homepage": "http://www.github.com/lzomedia/groups.extractor",
+  "description": "Lzo Media package for extraction ",
+  "homepage": "https://github.com/lzomedia/groups.extractor",
 
   "keywords": ["minify", "jsmin", "javascript"],
   "type": "library",
