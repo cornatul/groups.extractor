@@ -1,0 +1,33 @@
+{
+  "name": "lzomedia/groups-extractor",
+  "description": "Official Lzo Media ",
+  "homepage": "http://www.github.com/lzomedia/groups.extractor",
+  "keywords": [
+    "minify",
+    "jsmin",
+    "javascript"
+  ],
+  "type": "library",
+  "authors": [
+    {
+      "name": "Joost Faassen",
+      "email": "j.faassen@linkorb.com",
+      "role": "Packaging for composer"
+    }
+  ],
+  "require": {
+    "php": ">=7.0.0",
+    "guzzlehttp/guzzle": "^6.2"
+  },
+  "autoload": {
+    "classmap": [
+      "src/"
+    ]
+  },
+  "require-dev": {
+    "fzaninotto/faker": "~1.4",
+    "bvanhoekelen/performance": "^2.3",
+    "phpunit/phpunit": "7"
+  },
+  "license": "MIT"
+}
