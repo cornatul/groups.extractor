@@ -6,15 +6,11 @@ use Illuminate\Support\ServiceProvider;
 
 use Illuminate\Support\Facades\Route;
 
-use LzoMedia\GroupsExtractor\Classes\Processor;
-use LzoMedia\GroupsExtractor\Clients\Client;
 use LzoMedia\GroupsExtractor\Managers\ClientManager;
-
-use LzoMedia\GroupsExtractor\Social\Facebook\Extractors\FeedExtractor;
-use LzoMedia\GroupsExtractor\Social\Facebook\Extractors\GroupExtractor;
-use LzoMedia\GroupsExtractor\Social\Facebook\FacebookApp;
 use LzoMedia\GroupsExtractor\Social\Yahoo\YahooApp;
-use LzoMedia\GroupsExtractor\Social\Yahoo\Extractors\GroupExtractor as YahooGroupExtractor;
+use LzoMedia\GroupsExtractor\Social\Yahoo\Extractors\YahooGroupExtractor;
+
+
 
 class GroupsExtractorServiceProvider extends ServiceProvider
 {
@@ -28,6 +24,8 @@ class GroupsExtractorServiceProvider extends ServiceProvider
 
     public function boot()
     {
+
+        \Log::info('Package was loaded');
 
         Route::get('/yahoo/', function (){
 
@@ -53,9 +51,6 @@ class GroupsExtractorServiceProvider extends ServiceProvider
 
         });
 
-
-
-
     }
 
     /**
@@ -64,7 +59,7 @@ class GroupsExtractorServiceProvider extends ServiceProvider
     public function register()
     {
         $this->app->bind('groups-extractor', function () {
-            return $this->app->make('LzoMedia\GroupsExtractor\GroupsExtractor');
+            return $this->app->make('LzoMedia\GroupsExtractor');
         });
     }
 
