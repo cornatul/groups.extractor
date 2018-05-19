@@ -54,62 +54,6 @@ class GroupsExtractorServiceProvider extends ServiceProvider
         });
 
 
-        Route::get('/facebook/{token}', function ($token){
-
-            //client test
-            $client = new ClientManager();
-
-            //start the Yahoo
-            $socialType = new FacebookApp($token);
-
-            //Type of extractor
-            $typeOfDataToExtract = new FeedExtractor();
-
-            $typeOfDataToExtract->setEndpoint('368215273251493');
-
-            //set the limit
-            $typeOfDataToExtract->setLimitPages(2);
-
-            //extractor type should be a interface up
-            $socialType->setExtractorType($typeOfDataToExtract);
-
-            // set socialType
-            $client->setSocialType($socialType);
-
-            //process
-            $client->process();
-
-            //gets the response
-            $response = $client->getResponse();
-
-            dd($response);
-
-
-        });
-
-        Route::get('/test/{token}', function ($token){
-
-
-            $client = new Client();
-
-            $facebook = new Facebook\Facebook();
-
-            $group = new FacebookGroupsExtractor();
-
-            $processor = new Processor();
-
-            $group->setToken($token);
-
-            $client->setApp($facebook);
-
-            $client->setType($group);
-
-            $client->process($processor);
-
-
-
-
-        });
 
 
     }
@@ -119,8 +63,8 @@ class GroupsExtractorServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->bind('groupsextractor', function () {
-            return $this->app->make('LzoMedia\GroupsExtractor\FacebookGroupsExtractor');
+        $this->app->bind('groups-extractor', function () {
+            return $this->app->make('LzoMedia\GroupsExtractor\GroupsExtractor');
         });
     }
 

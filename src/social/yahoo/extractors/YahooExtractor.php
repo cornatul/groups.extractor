@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\File;
  * Date: 30/03/17
  * Time: 08:29
  */
-class GroupExtractor extends Extractor implements GroupInterface
+class YahooGroupExtractor extends Extractor implements GroupInterface
 {
 
     protected $extractor;
