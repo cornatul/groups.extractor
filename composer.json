@@ -19,7 +19,9 @@
 
   },
   "autoload": {
-    "classmap": ["src/"]
+    "psr-4": {
+      "LzoMedia\\Groupsextractor\\": "src/"
+    }
   },
   "license": "MIT"
 }
