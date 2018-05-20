@@ -34,7 +34,7 @@ class YahooGroupExtractor extends Extractor implements GroupInterface
 
     protected $query = '&query=';
 
-    protected $limit = 10;
+    protected $limit = 500;
 
     protected $saveRemoteImages = false;
 
